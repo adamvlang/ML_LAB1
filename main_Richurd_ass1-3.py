@@ -18,15 +18,15 @@ print('\n')
 
 # Assignment 2 #
 ################
-
+i=0
 monk_gain = []
 attributes = m.attributes
 for set in data_sets:
 	for i in range(6):
 		monk_gain.append(dtree.averageGain(set, attributes[i]))
 	i=0
-print("Gain table: \n", monk_gain[0:5],  "\n",  monk_gain[6:11],  "\n",  monk_gain[12:17], "\n")
 
+print("Gain table: \n", monk_gain[0:6],  "\n",  monk_gain[6:12],  "\n",  monk_gain[12:18], "\n")
 
 # Assignment 3 #
 ################
