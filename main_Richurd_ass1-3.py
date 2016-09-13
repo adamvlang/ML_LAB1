@@ -26,7 +26,7 @@ for set in data_sets:
 		monk_gain.append(dtree.averageGain(set, attributes[i]))
 	i=0
 
-print("Gain table assignment 4: \n", monk_gain[0:6],  "\n",  monk_gain[6:12],  "\n",  monk_gain[12:18], "\n")
+print("Gain table assignment 2: \n", monk_gain[0:6],  "\n",  monk_gain[6:12],  "\n",  monk_gain[12:18], "\n")
 
 # Assignment 3 #
 ################
@@ -62,13 +62,14 @@ print("\nGain table for second nodes: \n", monk_gain[0:6],  "\n",  monk_gain[6:1
 
 
 t=dtree.buildTree(m.monk1, m.attributes)
-print(dtree.check(t, m.monk1test))
-#print(t)
+print("% of correctly classified samples in monk1test: ", dtree.check(t, m.monk1test))
+monkTEST1 = dtree.check(t, m.monk1test)
+print(t)
 t=dtree.buildTree(m.monk2, m.attributes)
-print(dtree.check(t, m.monk2test))
+print("% of correctly classified samples in monk2test: ", dtree.check(t, m.monk2test))
 #print(t)
 t=dtree.buildTree(m.monk3, m.attributes)
-print(dtree.check(t, m.monk3test))
+print("% of correctly classified samples in monk3test: ", dtree.check(t, m.monk3test))
 #print(t)
 print("\n")
 
@@ -81,18 +82,50 @@ def partition(data, fraction):
 	random.shuffle(ldata)
 	breakPoint = int(len(ldata) * fraction)
 	return ldata[:breakPoint], ldata[breakPoint:]
-monk1train, monk1val = partition(m.monk1, 0.8)
+monk1train, monk1val = partition(m.monk1, 0.8) #monk1train is the trainingset, monk1val is the validationset
 
-print("Pruning: ")
+print("length of training: ", len(monk1train))
+print("length of validation: ", len(monk1val))
+
+print("Pruning Monk1: ")
 t=dtree.buildTree(monk1train, m.attributes)
-print(dtree.check(t, monk1val))
-"""
-t=dtree.buildTree(m.monk2, m.attributes)
-print(dtree.check(t, monk2val))
-t=dtree.buildTree(m.monk3, m.attributes)
-print(dtree.check(t, monk3val))
-"""
+#print(dtree.check(t, monk1val))
+#while :
 
+listOfTrees = ()
+
+print("ListOfTrees type: ", type(listOfTrees))
+bestTreeOld = 11234
+listOfBetterTrees = 0
+while listOfBetterTrees != 15:
+	try:
+		listOfTrees = dtree.allPruned(t)
+	except:
+		print("No more possibilitys!")
+		break
+	print("number of available tree alternatives: ", len(listOfTrees))
+	#bestTree = ()
+	for tree in range(len(listOfTrees)):
+		print("tree: ", tree)
+
+		print(dtree.check(listOfTrees[tree], monk1val))
+		if dtree.check(listOfTrees[tree], monk1val) > monkTEST1:
+			monkTEST1 = dtree.check(listOfTrees[tree], monk1val)
+			bestTree = listOfTrees[tree]
+			print("Number on best tree", tree)
+	t=bestTree
+	if bestTree == bestTreeOld:
+		break
+	bestTreeOld = bestTree
+	listOfBetterTrees = listOfBetterTrees + 1
+	print("BEST POSSIBLE: ", bestTree)
+	print(dtree.check(listOfTrees[tree], monk1val))
+print("Best Tree EVER: ", bestTree)
+#print("BEST POSSIBLE: ", dtree.check(bestPossibleTree, m.monk1test))
 ################
+
+print(dtree.check(bestTree, m.monk1test))
+
+print("Pruning Monk3: ")
 
 print("\n\n\n\n\n\n\n\n")
