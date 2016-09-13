@@ -18,7 +18,7 @@ print('\n')
 
 # Assignment 2 #
 ################
-i=0
+i = 0
 monk_gain = []
 attributes = m.attributes
 for set in data_sets:
@@ -31,12 +31,19 @@ print("Gain table: \n", monk_gain[0:6],  "\n",  monk_gain[6:12],  "\n",  monk_ga
 # Assignment 3 #
 ################
 
+data_set_Monk1 = dtree.select(data_sets[0], attributes[5], 1)
+print(hej,' \n\n')
+print (data_sets[0])
+
+
+
+
 t=dtree.buildTree(m.monk1, m.attributes)
 print(dtree.check(t, m.monk1test))
 t=dtree.buildTree(m.monk2, m.attributes)
 print(dtree.check(t, m.monk2test))
 t=dtree.buildTree(m.monk3, m.attributes)
-print(dtree.check(t, m.monk3test))
+print(dtree.check(t, m.monk3test), "\n")
 
 
 # Assignment 4 #
