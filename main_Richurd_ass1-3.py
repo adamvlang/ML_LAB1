@@ -70,6 +70,7 @@ print("% of correctly classified samples in monk2test: ", dtree.check(t, m.monk2
 #print(t)
 t=dtree.buildTree(m.monk3, m.attributes)
 print("% of correctly classified samples in monk3test: ", dtree.check(t, m.monk3test))
+monkTEST3 = dtree.check(t, m.monk3test)
 #print(t)
 print("\n")
 
@@ -82,7 +83,7 @@ def partition(data, fraction):
 	random.shuffle(ldata)
 	breakPoint = int(len(ldata) * fraction)
 	return ldata[:breakPoint], ldata[breakPoint:]
-monk1train, monk1val = partition(m.monk1, 0.8) #monk1train is the trainingset, monk1val is the validationset
+monk1train, monk1val = partition(m.monk1, 0.9) #monk1train is the trainingset, monk1val is the validationset
 
 print("length of training: ", len(monk1train))
 print("length of validation: ", len(monk1val))
@@ -94,14 +95,13 @@ t=dtree.buildTree(monk1train, m.attributes)
 
 listOfTrees = ()
 
-print("ListOfTrees type: ", type(listOfTrees))
 bestTreeOld = 11234
 listOfBetterTrees = 0
 while listOfBetterTrees != 15:
 	try:
 		listOfTrees = dtree.allPruned(t)
 	except:
-		print("No more possibilitys!")
+		print("No more possibilities!")
 		break
 	print("number of available tree alternatives: ", len(listOfTrees))
 	#bestTree = ()
@@ -113,7 +113,10 @@ while listOfBetterTrees != 15:
 			monkTEST1 = dtree.check(listOfTrees[tree], monk1val)
 			bestTree = listOfTrees[tree]
 			print("Number on best tree", tree)
-	t=bestTree
+	try:
+		t=bestTree
+	except:
+		bestTree=t
 	if bestTree == bestTreeOld:
 		break
 	bestTreeOld = bestTree
@@ -124,8 +127,50 @@ print("Best Tree EVER: ", bestTree)
 #print("BEST POSSIBLE: ", dtree.check(bestPossibleTree, m.monk1test))
 ################
 
-print(dtree.check(bestTree, m.monk1test))
+print("correct in monk1test: ", dtree.check(bestTree, m.monk1test))
 
 print("Pruning Monk3: ")
+"""
+monk3train, monk3val = partition(m.monk3, 0.9) #monk1train is the trainingset, monk1val is the validationset
+t=dtree.buildTree(monk3train, m.attributes)
+#print(dtree.check(t, monk1val))
+#while :
 
+listOfTrees = ()
+
+bestTreeOld = 11234
+listOfBetterTrees = 0
+while listOfBetterTrees != 15:
+	try:
+		listOfTrees = dtree.allPruned(t)
+	except:
+		print("No more possibilities!")
+		break
+	print("number of available tree alternatives: ", len(listOfTrees))
+	#bestTree = ()
+	for tree in range(len(listOfTrees)):
+		print("tree: ", tree)
+
+		print(dtree.check(listOfTrees[tree], monk3val))
+		if dtree.check(listOfTrees[tree], monk3val) > monkTEST3:
+			monkTEST3 = dtree.check(listOfTrees[tree], monk3val)
+			bestTree = listOfTrees[tree]
+			print("Number on best tree", tree)
+	try:
+		t=bestTree
+	except:
+		bestTree=t
+	if bestTree == bestTreeOld:
+		break
+	bestTreeOld = bestTree
+	listOfBetterTrees = listOfBetterTrees + 1
+	print("BEST POSSIBLE: ", bestTree)
+	print(dtree.check(listOfTrees[tree], monk3val))
+print("Best Tree EVER: ", bestTree)
+#print("BEST POSSIBLE: ", dtree.check(bestPossibleTree, m.monk1test))
+################
+
+print("correct in monk3test: ", dtree.check(bestTree, m.monk3test))
+
+"""
 print("\n\n\n\n\n\n\n\n")
